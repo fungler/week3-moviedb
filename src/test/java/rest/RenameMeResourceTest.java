@@ -1,6 +1,6 @@
 package rest;
 
-import entities.RenameMe;
+import entities.Movie;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -71,8 +71,8 @@ public class RenameMeResourceTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
-            em.persist(new RenameMe("Some txt","More text"));
-            em.persist(new RenameMe("aaa","bbb"));
+            em.persist(new Movie(1998,"More text"));
+            em.persist(new Movie(2003, "bbb"));
            
             em.getTransaction().commit();
         } finally {
@@ -83,7 +83,7 @@ public class RenameMeResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/xxx").then().statusCode(200);
+        given().when().get("/monday2").then().statusCode(200);
     }
    
     //This test assumes the database contains two rows
@@ -91,17 +91,17 @@ public class RenameMeResourceTest {
     public void testDummyMsg() throws Exception {
         given()
         .contentType("application/json")
-        .get("/xxx/").then()
+        .get("/monday2/").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("msg", equalTo("Hello World"));   
+        .body("msg", equalTo("Default page"));   
     }
     
     @Test
     public void testCount() throws Exception {
         given()
         .contentType("application/json")
-        .get("/xxx/count").then()
+        .get("/monday2/count").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("count", equalTo(2));   
