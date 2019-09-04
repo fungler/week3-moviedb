@@ -28,7 +28,7 @@ public class FacadeExampleTest {
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(
                 "pu",
-                "jdbc:mysql://localhost:3307/startcode_test",
+                "jdbc:mysql://localhost:3307/moviedb_test",
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
@@ -59,7 +59,7 @@ public class FacadeExampleTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
             em.persist(new Movie(1998, "some movie"));
             em.persist(new Movie(2000, "nuttyman 2"));
 
@@ -73,8 +73,7 @@ public class FacadeExampleTest {
     public void tearDown() {
 //        Remove any data after each test was run
     }
-
-    // TODO: Delete or change this method 
+    
     @Test
     public void testAFacadeMethod() {
         assertEquals(2, facade.getCount(), "Expects two rows in the database");

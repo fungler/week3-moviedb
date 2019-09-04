@@ -29,7 +29,7 @@ public class RenameMeResourceTest {
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
     //Read this line from a settings-file  since used several places
-    private static final String TEST_DB = "jdbc:mysql://localhost:3307/startcode_test";
+    private static final String TEST_DB = "jdbc:mysql://localhost:3307/moviedb_test";
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -70,7 +70,7 @@ public class RenameMeResourceTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
             em.persist(new Movie(1998,"More text"));
             em.persist(new Movie(2003, "bbb"));
            
@@ -83,15 +83,14 @@ public class RenameMeResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/monday2").then().statusCode(200);
+        given().when().get("/monday").then().statusCode(200);
     }
    
-    //This test assumes the database contains two rows
     @Test
     public void testDummyMsg() throws Exception {
         given()
         .contentType("application/json")
-        .get("/monday2/").then()
+        .get("/monday").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("msg", equalTo("Default page"));   
@@ -101,7 +100,7 @@ public class RenameMeResourceTest {
     public void testCount() throws Exception {
         given()
         .contentType("application/json")
-        .get("/monday2/count").then()
+        .get("/monday/count").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("count", equalTo(2));   
