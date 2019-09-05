@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -48,7 +49,7 @@ public class MovieFacade {
             
             for (Movie m : movieList) 
             {
-                mldto.add(new MovieDTO(m.getId(), m.getYear(), m.getName()));
+                mldto.add(new MovieDTO(m.getId(), m.getYear(), m.getName(), m.getActors()));
             }
             
             return mldto;
@@ -63,7 +64,7 @@ public class MovieFacade {
         try{
             Movie m = (Movie)em.createQuery("SELECT m FROM Movie m WHERE m.id=" + id).getSingleResult();
             
-            MovieDTO foundMovie = new MovieDTO(m.getId(), m.getYear(), m.getName());
+            MovieDTO foundMovie = new MovieDTO(m.getId(), m.getYear(), m.getName(), m.getActors());
             
             return foundMovie;
             
@@ -72,9 +73,9 @@ public class MovieFacade {
         }
     }
     
-    public void CreateMovie(int year, String name) {
+    public void CreateMovie(int year, String name, String[] actors) {
         EntityManager em = emf.createEntityManager();
-        Movie newMovie = new Movie(year, name);
+        Movie newMovie = new Movie(year, name, actors);
         
         try {
             em.getTransaction().begin();
@@ -91,6 +92,22 @@ public class MovieFacade {
             long count = (long)em.createQuery("SELECT count(m) FROM Movie m").getSingleResult();
             
             return count;
+            
+        }finally{  
+            em.close();
+        }
+    }
+    
+    // Jeg kan ikke få denne JPQL query til at virke.. Jeg kan simpelthen ikke finde problemet. Hvis noget kan fortælle mig
+    // hvordan man løser problemet skylder jeg en øl.
+    public List<Movie> getActorInFilms(String actorName) {
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<Movie> foundMovies = em.createQuery("SELECT m FROM Movie m WHERE :actorname MEMBER OF m.actors", Movie.class);
+            foundMovies.setParameter("actorname", actorName);
+            List<Movie> resultMemberOf = foundMovies.getResultList();
+            
+            return resultMemberOf;
             
         }finally{  
             em.close();

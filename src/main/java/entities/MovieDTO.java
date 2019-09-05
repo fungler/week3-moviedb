@@ -14,11 +14,13 @@ public class MovieDTO {
     public Long id;
     public int year;
     public String name;
+    public String[] actors;
 
-    public MovieDTO(Long id, int year, String name) {
+    public MovieDTO(Long id, int year, String name, String[] actors) {
         this.id = id;
         this.year = year;
         this.name = name;
+        this.actors = actors;
     }
 
     public Long getId() {

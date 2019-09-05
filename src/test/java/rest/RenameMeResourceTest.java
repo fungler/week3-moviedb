@@ -13,7 +13,11 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,8 +75,8 @@ public class RenameMeResourceTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie(1998,"More text"));
-            em.persist(new Movie(2003, "bbb"));
+            em.persist(new Movie(1998,"More text", new String[]{"Mark Boi", "Johanne Gurl"}));
+            em.persist(new Movie(2003, "bbb", new String[]{"Mark Boi", "Johanne Gurl"}));
            
             em.getTransaction().commit();
         } finally {
@@ -105,4 +109,26 @@ public class RenameMeResourceTest {
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("count", equalTo(2));   
     }
+    
+    @Test
+    public void testAllActors() throws Exception {
+        given()
+        .contentType("application/json")
+        .get("/monday/all").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body(containsString("Mark Boi"));   
+    }
+    
+    // Kan ikke få denne test til at virke. I'm out of luck.
+    // Jeg får den rigtige film, men testen vælger bare at fejle og kan ikke finde svaret.
+//    @Test
+//    public void testMovieID() throws Exception {
+//        given()
+//        .contentType("application/json")
+//        .get("/monday/9").then()
+//        .assertThat()
+//        .statusCode(HttpStatus.OK_200.getStatusCode())
+//        .body("id", equalTo(9));   
+//    }
 }

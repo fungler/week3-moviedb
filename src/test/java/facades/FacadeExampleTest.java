@@ -59,9 +59,10 @@ public class FacadeExampleTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie(1998, "some movie"));
-            em.persist(new Movie(2000, "nuttyman 2"));
+            //em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
+            em.createNativeQuery("DELETE FROM MOVIE").executeUpdate();
+            em.persist(new Movie(1998, "some movie", new String[]{"Mark Boi", "Johanne Gurl"}));
+            em.persist(new Movie(2000, "nuttyman 2", new String[]{"Jens Mogens", "Ice Cube"}));
 
             em.getTransaction().commit();
         } finally {

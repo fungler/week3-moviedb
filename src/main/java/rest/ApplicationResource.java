@@ -63,10 +63,27 @@ public class ApplicationResource {
 //        throw new UnsupportedOperationException();
 //    }
 //    
-//    @PUT
-//    @Path("/{id}")
-//    @Consumes({MediaType.APPLICATION_JSON})
-//    public void update(Movie entity, @PathParam("id") int id) {
-//        throw new UnsupportedOperationException();
-//    }
+    
+    // Har problemer med denne opgave. (Også forklaret i facaden)
+    @GET
+    @Path("name/{name}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String findActor(@PathParam("name") String name) {
+        List<Movie> foundMovs = FACADE.getActorInFilms("Mark Boi");
+        return GSON.toJson(foundMovs);
+    }
+    
+    @GET
+    @Path("/{id}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String findMovieByID(@PathParam("id") int id) {
+        try {
+            Long toLong = new Long(id);
+            MovieDTO m = FACADE.GetMovieByID(toLong);
+            return GSON.toJson(m);
+        }
+        catch (Exception e){
+            return "No movie found with the specified ID.";
+        }
+    }
 }
