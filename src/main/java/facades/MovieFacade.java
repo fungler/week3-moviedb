@@ -79,7 +79,7 @@ public class MovieFacade {
         
         try {
             em.getTransaction().begin();
-            em.persist(em);
+            em.persist(newMovie);
             em.getTransaction().commit();
         } finally {
             em.close();
