@@ -57,6 +57,14 @@ public class ApplicationResource {
     }
 
     
+    @Path("create")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String makeUsers() {
+        FACADE.CreateMovie(2004, "Bingbong land", new String[]{"John Doe", "Pia Lone"});
+        FACADE.CreateMovie(2006, "xD machine", new String[]{"Trump", "Justin Bieber"});
+        return "Making users.."; 
+    } 
 //    @POST
 //    @Consumes({MediaType.APPLICATION_JSON})
 //    public void create(Movie entity) {
